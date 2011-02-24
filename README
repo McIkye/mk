@@ -1,4 +1,8 @@
 various helper makefiles
 
+bsd.avr.mk
+	BSD style include makefile that builds and burns
+	avr microcontrollers' images
+
 --
     paranoic mickey       (my employers have changed but, the name has remained)
