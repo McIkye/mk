@@ -2,12 +2,18 @@
 .include <bsd.own.mk>
 
 AVRDUDE?=avrdude
-AVRPROG?=usbtiny
-#AVRPROG?=avrisp
+AVRPROG?=avrisp
+.if ${AVRPROG} == avrisp
+AVRPORT?=/dev/ttyU0
+AVRBR?=57600
+AVRFLAGS?=-c ${AVRPROG} -p ${AVRMCU} -P ${AVRPORT} -b ${AVRBR} -v
+.elif ${AVRPROG} == usbtiny
 AVRPORT?=/dev/ugen0
-#AVRPORT?=/dev/ttyU0
 AVRFLAGS?=-c ${AVRPROG} -p ${AVRMCU} -P ${AVRPORT}  -v
-#AVRFLAGS?=-c ${AVRPROG} -p ${AVRMCU} -P ${AVRPORT} -b 57600 -v
+.else
+.BEGIN:
+	@echo bsd.avr.mk: ${AVRPROG} is invalid && false
+.endif
 
 SHELL	= sh
 SUDO	= sudo
