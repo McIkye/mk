@@ -1,8 +1,16 @@
+
 various helper makefiles
 
 bsd.avr.mk
 	BSD style include makefile that builds and burns
-	avr microcontrollers' images
+	avr microcontrollers' images;
+	mandatory variables:
+	  PROG	- set program name (as in bsd.prog.mk)
+	  MCU	- set MCU type for gcc (atmega168, atmega328p etc)
+	  FREQ	- set system clock frequency in Hz (8000000, 16000000 etc)
+	optional variables (defaults are calculated on the above):
+	  AVRMCU- set MCU name for avrdude
+	  AVRBR	- set baud rate for ftdi programmer (default is 57600)
 
 --
     paranoic mickey       (my employers have changed but, the name has remained)
