@@ -2,6 +2,22 @@
 .include <bsd.own.mk>
 
 AVRDUDE?=avrdude
+
+# calculate default mcu type for avrdude and cpp define
+.if ${MCU} == atmega168
+AVRMCU?=m168
+CPPFLAGS+=-D__AVR_ATmega168__
+.elif ${MCU} == atmega328p
+AVRMCU?=m328p
+CPPFLAGS+=-D__AVR_ATmega328P__
+.elif ${MCU} == atmega1280
+AVRMCU?=m1280
+CPPFLAGS+=-D__AVR_ATmega1280__
+.else
+.BEGIN::
+	@echo bsd.avr.mk: MCU=${MCU} is invalid && false
+.endif
+
 AVRPROG?=avrisp
 .if ${AVRPROG} == avrisp
 AVRPORT?=/dev/ttyU0
@@ -11,8 +27,8 @@ AVRFLAGS?=-c ${AVRPROG} -p ${AVRMCU} -P ${AVRPORT} -b ${AVRBR} -v
 AVRPORT?=/dev/ugen0
 AVRFLAGS?=-c ${AVRPROG} -p ${AVRMCU} -P ${AVRPORT}  -v
 .else
-.BEGIN:
-	@echo bsd.avr.mk: ${AVRPROG} is invalid && false
+.BEGIN::
+	@echo bsd.avr.mk: AVRPROG=${AVRPROG} is invalid && false
 .endif
 
 SHELL	= sh
@@ -24,7 +40,8 @@ OBJDUMP	= avr-objdump
 SIZE	= size
 CPPFLAGS+= -DF_CPU=${FREQ}
 MKDEP  += -I/usr/local/avr/include
-CFLAGS +=-mmcu=${MCU} -Os -fno-builtin  -Wall -Werror
+CFLAGS += -mmcu=${MCU} -Os -fno-builtin  -Wall -Werror
+CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 
 .if defined(PROG)
 SRCS?=  ${PROG}.c
