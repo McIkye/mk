@@ -12,5 +12,13 @@ bsd.avr.mk
 	  AVRMCU- set MCU name for avrdude
 	  AVRBR	- set baud rate for ftdi programmer (default is 57600)
 
+bsd.fpga.mk
+	BSD style include makefile that builds and burns
+	FPGAs using Xilinx tools
+	mandatory variables:
+	  PROG	- set program name (as in bsd.prog.mk)
+	  XARCH - FPGA architecture (such as spartan3e)
+	  XFPGA - synthesyse for (such as xc3s500e-fg320-5)
+
 --
     paranoic mickey       (my employers have changed but, the name has remained)
