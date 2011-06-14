@@ -13,6 +13,9 @@ CPPFLAGS+=-D__AVR_ATmega328P__
 .elif ${MCU} == atmega1280
 AVRMCU?=m1280
 CPPFLAGS+=-D__AVR_ATmega1280__
+.elif ${MCU} == atmega2561
+AVRMCU?=m2561
+CPPFLAGS+=-D__AVR_ATmega2561__
 .else
 .BEGIN::
 	@echo bsd.avr.mk: MCU=${MCU} is invalid && false
