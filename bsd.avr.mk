@@ -45,13 +45,7 @@ CPPFLAGS+= -DF_CPU=${FREQ}
 MKDEP  += -I/usr/local/avr/include
 CFLAGS += -mmcu=${MCU} -Os -fno-builtin  -Wall -Werror
 CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
-
-.if defined(PROG)
-SRCS?=  ${PROG}.c
-.  if !empty(SRCS:N*.h:N*.sh)
-OBJS+=  ${SRCS:N*.h:N*.sh:R:S/$/.o/g}
-.  endif
-.endif
+AFLAGS += -mmcu=${MCU}
 
 .SUFFIXES: .o .S .c
 
@@ -61,6 +55,13 @@ OBJS+=  ${SRCS:N*.h:N*.sh:R:S/$/.o/g}
 	${CC} ${AFLAGS} ${CPPFLAGS} -c ${.IMPSRC}
 .s.o:
 	${CC} ${AFLAGS} -c ${.IMPSRC}
+
+.if defined(PROG)
+SRCS?=  ${PROG}.c
+.  if !empty(SRCS:N*.h:N*.Sh)
+OBJS+=  ${SRCS:N*.h:N*.Sh:R:S/$/.o/g}
+.  endif
+.endif
 
 CLEANFILES+=${PROG}.eep ${PROG}.hex ${PROG}.lss
 
