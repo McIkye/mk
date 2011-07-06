@@ -4,7 +4,16 @@
 AVRDUDE?=avrdude
 
 # calculate default mcu type for avrdude and cpp define
-.if ${MCU} == atmega168
+.if ${MCU} == attiny44
+AVRMCU?=t44
+CPPFLAGS+=-D__AVR_ATtiny44__
+.elif ${MCU} == attiny45
+AVRMCU?=t45
+CPPFLAGS+=-D__AVR_ATtiny45__
+.elif ${MCU} == attiny84
+AVRMCU?=t84
+CPPFLAGS+=-D__AVR_ATtiny84__
+.elif ${MCU} == atmega168
 AVRMCU?=m168
 CPPFLAGS+=-D__AVR_ATmega168__
 .elif ${MCU} == atmega328p
@@ -57,7 +66,15 @@ AFLAGS += -mmcu=${MCU}
 	${CC} ${AFLAGS} -c ${.IMPSRC}
 
 .if defined(PROG)
+.  if !defined(SRCS) || empty(SRCS)
+.    if exists(${PROG}.c)
 SRCS?=  ${PROG}.c
+.    elif exists(${PROG}.S)
+SRCS?=  ${PROG}.S
+.    elif exists(${PROG}.s)
+SRCS?=  ${PROG}.s
+.    endif
+.  endif
 .  if !empty(SRCS:N*.h:N*.Sh)
 OBJS+=  ${SRCS:N*.h:N*.Sh:R:S/$/.o/g}
 .  endif
