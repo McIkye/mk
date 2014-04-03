@@ -48,13 +48,15 @@ clean: _SUBDIRUSE
 .endif
 
 ${PROG}.prj: ${SRCS}
-	for i in ${SRCS}; do echo ${.CURDIR}/$$i; done > ${PROG}.prj
+	for i in ${SRCS}; do echo verilog work ${.CURDIR}/$$i; done > ${PROG}.prj
 
 ${PROG}.xst: ${PROG}.prj
-	printf "run\n-ifn %s\n-ifmt %s\n-ofn %s\n-ofmt NGC\n-p %s\n-opt_mode Area\n-opt_level 2" ${PROG}.prj VHDL ${PROG}.ngc ${XFPGA} > ${PROG}.xst
-	${XST} -ifn ${PROG}.xst -ofn ${PROG}.srp
+	printf "run\n-top %s\n-ifn %s\n-ifmt %s\n-ofn %s\n-ofmt NGC\n-p %s\n-opt_mode Area\n-opt_level 2" ${PROG} ${PROG}.prj MIXED ${PROG}.ngc ${XFPGA} > ${PROG}.xst
 
-${PROG}.ncd: ${PROG}.xst ${.CURDIR}/${XARCH}.ucf
+${PROG}.srp: ${PROG}.xst
+	${XST} -ifn ${PROG}.xst -ofn ${PROG}.srp -intstyle xflow
+
+${PROG}.ncd: ${PROG}.srp ${.CURDIR}/${XARCH}.ucf
 	${XNGBUILD} ${XNGBOPTS} ${PROG}.ngc ${PROG}.ngd
 	${XMAP} ${XMAPOPTS} -o ${PROG}.ncd ${PROG}.ngd ${PROG}.pcf
 	${XPAR} ${XPAROPTS} ${PROG}.ncd ${PROG}.ncd ${PROG}.pcf
