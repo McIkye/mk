@@ -13,6 +13,9 @@ CPPFLAGS+=-D__AVR_ATtiny45__
 .elif ${MCU} == attiny84
 AVRMCU?=t84
 CPPFLAGS+=-D__AVR_ATtiny84__
+.elif ${MCU} == atmega8
+AVRMCU?=m8
+CPPFLAGS+=-D__AVR_ATmega8__
 .elif ${MCU} == atmega168
 AVRMCU?=m168
 CPPFLAGS+=-D__AVR_ATmega168__
